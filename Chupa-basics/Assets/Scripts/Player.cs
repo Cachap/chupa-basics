@@ -3,6 +3,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField] float movementSpeed = 3f;
+    [SerializeField] float rotateSpeed = 5f;
 
     private void Update()
     {
@@ -17,10 +18,17 @@ public class Player : MonoBehaviour
 
         if (Input.GetKey(KeyCode.A))
             Move(Vector3.left);
+
+        Rotate(Input.GetAxis("Mouse X"));
     }
 
 	private void Move(Vector3 direction)
 	{
 		transform.position += movementSpeed * Time.deltaTime * direction;
 	}
+
+    private void Rotate(float direction)
+    {
+        transform.Rotate(Vector3.up, rotateSpeed * direction);
+    }
 }
