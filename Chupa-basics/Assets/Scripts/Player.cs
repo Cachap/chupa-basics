@@ -10,9 +10,12 @@ public class Player : MonoBehaviour
     [SerializeField] float staminaConsumption = 40f;
     [SerializeField] float staminaRecovery = 20f;
 
+    [SerializeField] float pickupDistance = 2f;
+
     float currentlyMovementSpeed = 3f;
 
     public float Stamina { get { return stamina; } }  
+    public bool IsShowInfoItem { get; private set; }  
 
 	private void Update()
     {
@@ -29,6 +32,9 @@ public class Player : MonoBehaviour
             Move(Vector3.left);
 
         Rotate(Input.GetAxis("Mouse X"));
+
+        DetectedItem();
+        UseItem();
 
         if (Input.GetKey(KeyCode.LeftShift) 
             && !StaminaIsOver() 
@@ -53,6 +59,43 @@ public class Player : MonoBehaviour
     private void Rotate(float direction)
     {
         transform.Rotate(Vector3.up, rotateSpeed * direction);
+    }
+
+    private void DetectedItem()
+	{
+        Ray ray = new Ray(transform.position, transform.TransformDirection(Vector3.forward) * pickupDistance);
+
+        if (Physics.Raycast(ray, out RaycastHit obj, pickupDistance))
+		{
+            var itemObj = obj.transform.gameObject;
+            if (itemObj.CompareTag(Item.ItemTag))
+			{
+                IsShowInfoItem = true;
+                PickupItem(itemObj.GetComponent<Item>());
+            }
+        }
+        else
+            IsShowInfoItem = false;
+    }
+
+    private void PickupItem(Item item)
+    {
+       if (Input.GetKeyDown(KeyCode.E))
+	   {
+           Inventory.AddItem(item);
+       }
+    }
+
+    private void UseItem()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+            Inventory.UseItem((int)KeyCode.Alpha1 - 49);
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+            Inventory.UseItem((int)KeyCode.Alpha2 - 49);
+
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+            Inventory.UseItem((int)KeyCode.Alpha3 - 49);
     }
 
     private bool StaminaIsOver()
