@@ -2,18 +2,19 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] float defaultMovementSpeed = 3f;
+    [SerializeField] float runSpeed = 7f;
+    [SerializeField] float walkSpeed = 3f;
     [SerializeField] float rotateSpeed = 5f;
-    float currentlyMovementSpeed = 3f;
 
     [SerializeField] float stamina = 100f;
-    [SerializeField] float boostMovementSpeed = 7f;
     [SerializeField] float staminaConsumption = 40f;
     [SerializeField] float staminaRecovery = 20f;
 
-    private bool isRun;
+    float currentlyMovementSpeed = 3f;
 
-    private void Update()
+    public float Stamina { get { return stamina; } }  
+
+	private void Update()
     {
         if (Input.GetKey(KeyCode.W))
             Move(Vector3.forward);
@@ -27,14 +28,21 @@ public class Player : MonoBehaviour
         if (Input.GetKey(KeyCode.A))
             Move(Vector3.left);
 
-        if (Input.GetKey(KeyCode.LeftShift))
-            Run();
-
-        if (Input.GetKeyUp(KeyCode.LeftShift))
-            Walk();
-
         Rotate(Input.GetAxis("Mouse X"));
-        RecoveryStamina();
+
+        if (Input.GetKey(KeyCode.LeftShift) 
+            && !StaminaIsOver() 
+            && !Input.GetKeyUp(KeyCode.LeftShift))
+		{
+            Run();
+            DecreaseStamina();
+		}
+
+		else if (!StaminaIsFull())
+		{
+            Walk();
+            IncreaseStamina();
+		}
     }
 
 	private void Move(Vector3 direction)
@@ -47,26 +55,39 @@ public class Player : MonoBehaviour
         transform.Rotate(Vector3.up, rotateSpeed * direction);
     }
 
+    private bool StaminaIsOver()
+    {
+        if (stamina > 0)
+            return false;
+
+        return true;
+    }
+
+    private bool StaminaIsFull()
+    {
+        if (stamina < 100)
+            return false;
+
+        return true;
+    }
+
     private void Run()
     {
-        isRun = true;
-        currentlyMovementSpeed = boostMovementSpeed;
-
-        if (stamina > 0)
-            stamina -= staminaConsumption * Time.deltaTime;
-        else
-            currentlyMovementSpeed = defaultMovementSpeed;
+        currentlyMovementSpeed = runSpeed;
     }
 
     private void Walk()
 	{
-        isRun = false;
-        currentlyMovementSpeed = defaultMovementSpeed;
+        currentlyMovementSpeed = walkSpeed;
     }
 
-    private void RecoveryStamina()
+    private void DecreaseStamina()
+    {
+        stamina -= staminaConsumption * Time.deltaTime;
+    }
+
+    private void IncreaseStamina()
 	{
-        if(stamina < 100 && !isRun)
-            stamina += staminaRecovery * Time.deltaTime;
+        stamina += staminaRecovery * Time.deltaTime;
 	}
 }
