@@ -2,20 +2,26 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] float runSpeed = 7f;
-    [SerializeField] float walkSpeed = 3f;
-    [SerializeField] float rotateSpeed = 5f;
+    [SerializeField] private float runSpeed = 7f;
+    [SerializeField] private float walkSpeed = 3f;
+    [SerializeField] private float rotateSpeed = 5f;
 
-    [SerializeField] float stamina = 100f;
-    [SerializeField] float staminaConsumption = 40f;
-    [SerializeField] float staminaRecovery = 20f;
+    [SerializeField] private float stamina = 100f;
+    [SerializeField] private float staminaConsumption = 40f;
+    [SerializeField] private float staminaRecovery = 20f;
 
-    [SerializeField] float pickupDistance = 2f;
+    [SerializeField] private float pickupDistance = 2f;
 
-    float currentlyMovementSpeed = 3f;
+    private float currentlyMovementSpeed = 3f;
+    private Inventory inventory;
 
     public float Stamina { get { return stamina; } }  
-    public bool IsShowInfoItem { get; private set; }  
+    public bool IsShowInfoItem { get; private set; }
+
+	private void Start()
+	{
+		inventory = GetComponent<Inventory>();
+	}
 
 	private void Update()
     {
@@ -33,7 +39,7 @@ public class Player : MonoBehaviour
 
         Rotate(Input.GetAxis("Mouse X"));
 
-        DetectedItem();
+        DetectionItem();
         UseItem();
 
         if (Input.GetKey(KeyCode.LeftShift) 
@@ -61,7 +67,7 @@ public class Player : MonoBehaviour
         transform.Rotate(Vector3.up, rotateSpeed * direction);
     }
 
-    private void DetectedItem()
+    private void DetectionItem()
 	{
         Ray ray = new Ray(transform.position, transform.TransformDirection(Vector3.forward) * pickupDistance);
 
@@ -82,20 +88,21 @@ public class Player : MonoBehaviour
     {
        if (Input.GetKeyDown(KeyCode.E))
 	   {
-           Inventory.AddItem(item);
+           item.gameObject.SetActive(false);
+           inventory.AddItem(item);
        }
     }
 
     private void UseItem()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
-            Inventory.UseItem((int)KeyCode.Alpha1 - 49);
+            inventory.UseItem((int)KeyCode.Alpha1 - 49);
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
-            Inventory.UseItem((int)KeyCode.Alpha2 - 49);
+            inventory.UseItem((int)KeyCode.Alpha2 - 49);
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
-            Inventory.UseItem((int)KeyCode.Alpha3 - 49);
+            inventory.UseItem((int)KeyCode.Alpha3 - 49);
     }
 
     private bool StaminaIsOver()

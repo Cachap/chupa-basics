@@ -1,64 +1,61 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public static class Inventory
+public class Inventory : MonoBehaviour
 {
-	public static Item[] items;
+	private Item[] items;
 
-	private static readonly int limitItems = 3;
-	private static int currentItems = 0;
-	private static readonly GameObject inventory;
-	private static readonly Image[] uiItems;
+	private readonly int limitItems = 3;
+	private int countItems = 0;
 
-	static Inventory()
+	[SerializeField] private Sprite emptyCell;
+	[SerializeField] private Image[] cells;
+
+	Inventory()
 	{
-		items = new Item[3];
-		inventory = GameObject.Find(nameof(Inventory));
-		uiItems = inventory.transform.GetComponentsInChildren<Image>()[1..];
+		items = new Item[limitItems];
 	}
 
-	public static void AddItem(Item item)
+	public void AddItem(Item item)
 	{
 		if (InventoryIsFull())
 			return;
 
-		item.gameObject.SetActive(false);
-
 		int i = 0;
-		foreach (var ui in uiItems)
+		foreach (var cell in cells)
 		{
-			if (ui.name == "Inventory")
-				continue;
-
-			if (ui.sprite.name == "EmptyItem")
+			if (cell.sprite == emptyCell)
 			{
-				ui.sprite = item.gameObject.GetComponent<Image>().sprite;
+				cell.sprite = item.sprite;
 				items[i] = item;
 				break;
 			}
-
 			i++;
 		}
-		currentItems++;
+		countItems++;
 	}
 
-	private static bool InventoryIsFull()
+	private bool InventoryIsFull()
 	{
-		if (currentItems >= limitItems)
+		if (countItems >= limitItems)
 			return true;
 
 		return false;
 	}
 
-	public static void UseItem(int index)
+	public void UseItem(int index)
 	{
-		if (items[index].gameObject.GetComponent<Image>().sprite.name == "EmptyItem")
+		if (items[index] == null)
 			return;
 
 		Debug.Log(items[index].Effect);
+		ClearCell(index);
+	}
 
-		currentItems--;
-		inventory.transform.GetChild(index).GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/EmptyItem");
+	private void ClearCell(int index)
+	{
+		countItems--;
+		cells[index].sprite = emptyCell;
 		items[index] = null;
 	}
 }

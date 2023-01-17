@@ -118,6 +118,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   effect: "\u041A\u0440\u0430\u0441\u043D\u044B\u0439"
+  sprite: {fileID: 21300000, guid: 273d7f44f27afb24c98401631fb5b4cd, type: 3}
 --- !u!222 &8319708728138835142
 CanvasRenderer:
   m_ObjectHideFlags: 0
