@@ -10,13 +10,14 @@ public class Player : MonoBehaviour
     [SerializeField] private float staminaConsumption = 40f;
     [SerializeField] private float staminaRecovery = 20f;
 
-    [SerializeField] private float pickupDistance = 2f;
+    [SerializeField] private float interactionDistance = 3f;
 
     private float currentlyMovementSpeed = 3f;
     private Inventory inventory;
 
     public float Stamina { get { return stamina; } }  
     public bool IsShowInfoItem { get; private set; }
+    public bool IsShowInfoDoor { get; private set; }
 
 	private void Start()
 	{
@@ -39,7 +40,7 @@ public class Player : MonoBehaviour
 
         Rotate(Input.GetAxis("Mouse X"));
 
-        DetectionItem();
+        DetectionInteractableObject();
         UseItem();
 
         if (Input.GetKey(KeyCode.LeftShift) 
@@ -67,21 +68,31 @@ public class Player : MonoBehaviour
         transform.Rotate(Vector3.up, rotateSpeed * direction);
     }
 
-    private void DetectionItem()
+    private void DetectionInteractableObject()
 	{
-        Ray ray = new Ray(transform.position, transform.TransformDirection(Vector3.forward) * pickupDistance);
+        Ray ray = new(transform.position, transform.TransformDirection(Vector3.forward) * interactionDistance);
 
-        if (Physics.Raycast(ray, out RaycastHit obj, pickupDistance))
+        if (Physics.Raycast(ray, out RaycastHit obj, interactionDistance))
 		{
-            var itemObj = obj.transform.gameObject;
-            if (itemObj.CompareTag(Item.ItemTag))
+            var someObj = obj.transform.gameObject;
+
+            if (someObj.CompareTag(Item.ItemTag))
 			{
                 IsShowInfoItem = true;
-                PickupItem(itemObj.GetComponent<Item>());
+                PickupItem(someObj.GetComponent<Item>());
+            }
+
+            if (someObj.CompareTag(Door.DoorTag))
+            {
+                IsShowInfoDoor = true;
+                ActionDoor(someObj.GetComponent<Door>());
             }
         }
         else
+		{
+            IsShowInfoDoor = false;
             IsShowInfoItem = false;
+        }
     }
 
     private void PickupItem(Item item)
@@ -91,6 +102,14 @@ public class Player : MonoBehaviour
            item.gameObject.SetActive(false);
            inventory.AddItem(item);
        }
+    }
+
+    private void ActionDoor(Door door)
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            door.Action();
+        }
     }
 
     private void UseItem()
@@ -121,28 +140,13 @@ public class Player : MonoBehaviour
         return true;
     }
 
-    private void Run()
-    {
-        currentlyMovementSpeed = runSpeed;
-    }
+    private void Run() => currentlyMovementSpeed = runSpeed;
 
-    private void Walk()
-	{
-        currentlyMovementSpeed = walkSpeed;
-    }
+    private void Walk() => currentlyMovementSpeed = walkSpeed;
 
-    private void DecreaseStamina()
-    {
-        stamina -= staminaConsumption * Time.deltaTime;
-    }
+    private void DecreaseStamina() => stamina -= staminaConsumption * Time.deltaTime;
 
-    private void IncreaseStamina()
-	{
-        stamina += staminaRecovery * Time.deltaTime;
-	}
+    private void IncreaseStamina() => stamina += staminaRecovery * Time.deltaTime;
 
-    public void UpStamina(float value)
-	{
-        stamina += value;
-	}
+    public void UpStamina(float value) => stamina += value;
 }

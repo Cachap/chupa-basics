@@ -5,6 +5,7 @@ public class UIManager : MonoBehaviour
 {
 	[SerializeField] Image fillStaminaBar;
 	[SerializeField] Text infoItem;
+	[SerializeField] Text infoDoor;
 	[SerializeField] Player player;
 
 	private void Update()
@@ -15,6 +16,11 @@ public class UIManager : MonoBehaviour
 			ShowInfoItem();
 		else
 			HideInfoItem();
+
+		if (player.IsShowInfoDoor)
+			ShowInfoDoor();
+		else
+			HideInfoDoor();
 	}
 
 	private void ChangeStaminaBar()
@@ -30,5 +36,15 @@ public class UIManager : MonoBehaviour
 	private void HideInfoItem()
 	{
 		infoItem.gameObject.SetActive(false);
+	}
+
+	private void ShowInfoDoor()
+	{
+		infoDoor.gameObject.SetActive(true);
+	}
+
+	private void HideInfoDoor()
+	{
+		infoDoor.gameObject.SetActive(false);
 	}
 }
