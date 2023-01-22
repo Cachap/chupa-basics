@@ -140,4 +140,9 @@ public class Player : MonoBehaviour
 	{
         stamina += staminaRecovery * Time.deltaTime;
 	}
+
+    public void UpStamina(float value)
+	{
+        stamina += value;
+	}
 }
