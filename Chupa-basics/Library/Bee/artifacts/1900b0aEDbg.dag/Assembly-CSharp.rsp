@@ -349,10 +349,15 @@
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/Unity.VSCode.Editor.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/UnityEditor.UI.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/UnityEngine.UI.ref.dll"
+"Assets/Scripts/InventorySystem/EffectOnEnemy.cs"
+"Assets/Scripts/InventorySystem/EffectOnYourself.cs"
+"Assets/Scripts/InventorySystem/IEffect.cs"
 "Assets/Scripts/InventorySystem/Inventory.cs"
 "Assets/Scripts/InventorySystem/Item.cs"
+"Assets/Scripts/MainMenu.cs"
 "Assets/Scripts/Player.cs"
 "Assets/Scripts/UIManager.cs"
+"Assets/Scripts/Utils/UI/TextColorOnHoverChange.cs"
 -langversion:9.0
 
 /deterministic

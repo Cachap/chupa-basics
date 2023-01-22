@@ -48,7 +48,7 @@ public class Inventory : MonoBehaviour
 		if (items[index] == null)
 			return;
 
-		Debug.Log(items[index].Effect);
+		items[index].Use();
 		ClearCell(index);
 	}
 

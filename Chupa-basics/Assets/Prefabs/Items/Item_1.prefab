@@ -117,7 +117,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c061c3e3f3fbb1c45a761dc2efdd7d9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  effect: "\u0416\u0451\u043B\u0442\u044B\u0439"
+  isYourSelf: 1
   sprite: {fileID: 21300000, guid: 3c702265b12076c4ba99278de5f4e2ad, type: 3}
 --- !u!222 &2559866192308643783
 CanvasRenderer:
