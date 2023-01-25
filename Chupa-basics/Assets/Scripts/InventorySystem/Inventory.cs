@@ -35,13 +35,7 @@ public class Inventory : MonoBehaviour
 		countItems++;
 	}
 
-	private bool InventoryIsFull()
-	{
-		if (countItems >= limitItems)
-			return true;
-
-		return false;
-	}
+	private bool InventoryIsFull() => countItems >= limitItems;
 
 	public void UseItem(int index)
 	{

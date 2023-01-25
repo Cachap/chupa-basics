@@ -23,28 +23,14 @@ public class UIManager : MonoBehaviour
 			HideInfoDoor();
 	}
 
-	private void ChangeStaminaBar()
-	{
-		fillStaminaBar.fillAmount = player.Stamina / 100;
-	}
+	private void ChangeStaminaBar() => fillStaminaBar.fillAmount = player.Stamina / 100;
+	
 
-	private void ShowInfoItem()
-	{
-		infoItem.gameObject.SetActive(true);
-	}
+	private void ShowInfoItem() => infoItem.gameObject.SetActive(true);
 
-	private void HideInfoItem()
-	{
-		infoItem.gameObject.SetActive(false);
-	}
+	private void HideInfoItem() => infoItem.gameObject.SetActive(false);
 
-	private void ShowInfoDoor()
-	{
-		infoDoor.gameObject.SetActive(true);
-	}
+	private void ShowInfoDoor() => infoDoor.gameObject.SetActive(true);
 
-	private void HideInfoDoor()
-	{
-		infoDoor.gameObject.SetActive(false);
-	}
+	private void HideInfoDoor() => infoDoor.gameObject.SetActive(false);
 }
