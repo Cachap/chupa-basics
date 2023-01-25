@@ -124,21 +124,9 @@ public class Player : MonoBehaviour
             inventory.UseItem((int)KeyCode.Alpha3 - 49);
     }
 
-    private bool StaminaIsOver()
-    {
-        if (stamina > 0)
-            return false;
+    private bool StaminaIsOver() => stamina > 0;
 
-        return true;
-    }
-
-    private bool StaminaIsFull()
-    {
-        if (stamina < 100)
-            return false;
-
-        return true;
-    }
+    private bool StaminaIsFull() => stamina < 100;
 
     private void Run() => currentlyMovementSpeed = runSpeed;
 
