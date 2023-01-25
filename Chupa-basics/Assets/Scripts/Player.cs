@@ -2,18 +2,29 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] float defaultMovementSpeed = 3f;
-    [SerializeField] float rotateSpeed = 5f;
-    float currentlyMovementSpeed = 3f;
+    [SerializeField] private float runSpeed = 7f;
+    [SerializeField] private float walkSpeed = 3f;
+    [SerializeField] private float rotateSpeed = 5f;
 
-    [SerializeField] float stamina = 100f;
-    [SerializeField] float boostMovementSpeed = 7f;
-    [SerializeField] float staminaConsumption = 40f;
-    [SerializeField] float staminaRecovery = 20f;
+    [SerializeField] private float stamina = 100f;
+    [SerializeField] private float staminaConsumption = 40f;
+    [SerializeField] private float staminaRecovery = 20f;
 
-    private bool isRun;
+    [SerializeField] private float interactionDistance = 3f;
 
-    private void Update()
+    private float currentlyMovementSpeed = 3f;
+    private Inventory inventory;
+
+    public float Stamina { get { return stamina; } }  
+    public bool IsShowInfoItem { get; private set; }
+    public bool IsShowInfoDoor { get; private set; }
+
+	private void Start()
+	{
+		inventory = GetComponent<Inventory>();
+	}
+
+	private void Update()
     {
         if (Input.GetKey(KeyCode.W))
             Move(Vector3.forward);
@@ -27,14 +38,24 @@ public class Player : MonoBehaviour
         if (Input.GetKey(KeyCode.A))
             Move(Vector3.left);
 
-        if (Input.GetKey(KeyCode.LeftShift))
-            Run();
-
-        if (Input.GetKeyUp(KeyCode.LeftShift))
-            Walk();
-
         Rotate(Input.GetAxis("Mouse X"));
-        RecoveryStamina();
+
+        DetectionInteractableObject();
+        UseItem();
+
+        if (Input.GetKey(KeyCode.LeftShift) 
+            && !StaminaIsOver() 
+            && !Input.GetKeyUp(KeyCode.LeftShift))
+		{
+            Run();
+            DecreaseStamina();
+		}
+
+		else if (!StaminaIsFull())
+		{
+            Walk();
+            IncreaseStamina();
+		}
     }
 
 	private void Move(Vector3 direction)
@@ -47,26 +68,85 @@ public class Player : MonoBehaviour
         transform.Rotate(Vector3.up, rotateSpeed * direction);
     }
 
-    private void Run()
-    {
-        isRun = true;
-        currentlyMovementSpeed = boostMovementSpeed;
+    private void DetectionInteractableObject()
+	{
+        Ray ray = new(transform.position, transform.TransformDirection(Vector3.forward) * interactionDistance);
 
-        if (stamina > 0)
-            stamina -= staminaConsumption * Time.deltaTime;
+        if (Physics.Raycast(ray, out RaycastHit obj, interactionDistance))
+		{
+            var someObj = obj.transform.gameObject;
+
+            if (someObj.CompareTag(Item.ItemTag))
+			{
+                IsShowInfoItem = true;
+                PickupItem(someObj.GetComponent<Item>());
+            }
+
+            if (someObj.CompareTag(Door.DoorTag))
+            {
+                IsShowInfoDoor = true;
+                ActionDoor(someObj.GetComponent<Door>());
+            }
+        }
         else
-            currentlyMovementSpeed = defaultMovementSpeed;
+		{
+            IsShowInfoDoor = false;
+            IsShowInfoItem = false;
+        }
     }
 
-    private void Walk()
-	{
-        isRun = false;
-        currentlyMovementSpeed = defaultMovementSpeed;
+    private void PickupItem(Item item)
+    {
+       if (Input.GetKeyDown(KeyCode.E))
+	   {
+           item.gameObject.SetActive(false);
+           inventory.AddItem(item);
+       }
     }
 
-    private void RecoveryStamina()
-	{
-        if(stamina < 100 && !isRun)
-            stamina += staminaRecovery * Time.deltaTime;
-	}
+    private void ActionDoor(Door door)
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            door.Action();
+        }
+    }
+
+    private void UseItem()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+            inventory.UseItem((int)KeyCode.Alpha1 - 49);
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+            inventory.UseItem((int)KeyCode.Alpha2 - 49);
+
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+            inventory.UseItem((int)KeyCode.Alpha3 - 49);
+    }
+
+    private bool StaminaIsOver()
+    {
+        if (stamina > 0)
+            return false;
+
+        return true;
+    }
+
+    private bool StaminaIsFull()
+    {
+        if (stamina < 100)
+            return false;
+
+        return true;
+    }
+
+    private void Run() => currentlyMovementSpeed = runSpeed;
+
+    private void Walk() => currentlyMovementSpeed = walkSpeed;
+
+    private void DecreaseStamina() => stamina -= staminaConsumption * Time.deltaTime;
+
+    private void IncreaseStamina() => stamina += staminaRecovery * Time.deltaTime;
+
+    public void UpStamina(float value) => stamina += value;
 }
