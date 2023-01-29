@@ -5,8 +5,6 @@ public class Door : MonoBehaviour
     private HingeJoint joint;
     private bool isOpened = true;
 
-    public readonly static string DoorTag = "Door";
-
     private void Start()
     {
         joint = GetComponent<HingeJoint>();

@@ -913,17 +913,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9623e9c94c72b334789bcd8475c5d82b, type: 3}
---- !u!114 &601867334 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4254467744510179856, guid: e0f7a59e024e8734285d3a3547006cbf, type: 3}
-  m_PrefabInstance: {fileID: 250980450742737718}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2069645044}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d9247119b3b39a47becd60ca90c05b2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &648515259
 GameObject:
   m_ObjectHideFlags: 0
@@ -1265,87 +1254,6 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 966213224}
-  m_CullTransparentMesh: 1
---- !u!1 &1121330709
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1121330710}
-  - component: {fileID: 1121330712}
-  - component: {fileID: 1121330711}
-  m_Layer: 5
-  m_Name: InfoDoor
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!224 &1121330710
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1121330709}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1811375594}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1, y: -119}
-  m_SizeDelta: {x: 561.2199, y: 142}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1121330711
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1121330709}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.8867924, g: 0.62324655, b: 0.08867926, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 60
-    m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 0
-    m_MaxSize: 61
-    m_Alignment: 1
-    m_AlignByGeometry: 0
-    m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: "\u0412\u0437\u0430\u0438\u043C\u043E\u0434\u0435\u0439\u0441\u0442\u0432\u043E\u0432\u0430\u0442\u044C
-    (\u0415)"
---- !u!222 &1121330712
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1121330709}
   m_CullTransparentMesh: 1
 --- !u!1001 &1328625927
 PrefabInstance:
@@ -1777,7 +1685,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1860977362}
-  - {fileID: 1121330710}
   m_Father: {fileID: 1861655641}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1874,12 +1781,12 @@ GameObject:
   - component: {fileID: 1860977364}
   - component: {fileID: 1860977363}
   m_Layer: 5
-  m_Name: InfoItem
+  m_Name: InfoObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1860977362
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1898,7 +1805,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: 14, y: -56.25}
-  m_SizeDelta: {x: 420.6958, y: 68.5}
+  m_SizeDelta: {x: 650, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1860977363
 MonoBehaviour:
@@ -1927,13 +1834,13 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 0
     m_MaxSize: 60
-    m_Alignment: 0
+    m_Alignment: 1
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u041F\u043E\u0434\u043E\u0431\u0440\u0430\u0442\u044C (\u0415)"
+  m_Text: 
 --- !u!222 &1860977364
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2059,9 +1966,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fillStaminaBar: {fileID: 305846015}
-  infoItem: {fileID: 1860977363}
-  infoDoor: {fileID: 1121330711}
-  player: {fileID: 601867334}
+  infoObject: {fileID: 1860977363}
 --- !u!1 &2031221510
 GameObject:
   m_ObjectHideFlags: 0
@@ -2266,6 +2171,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 4254467744510179856, guid: e0f7a59e024e8734285d3a3547006cbf, type: 3}
+      propertyPath: uiManager
+      value: 
+      objectReference: {fileID: 1861655642}
     - target: {fileID: 4254467744510179856, guid: e0f7a59e024e8734285d3a3547006cbf, type: 3}
       propertyPath: pickupDistance
       value: 5
