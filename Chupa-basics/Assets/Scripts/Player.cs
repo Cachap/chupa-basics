@@ -11,36 +11,21 @@ public class Player : MonoBehaviour
     [SerializeField] private float staminaRecovery = 20f;
 
     [SerializeField] private float interactionDistance = 3f;
-
+    [SerializeField] private UIManager uiManager;
+    
     private float currentlyMovementSpeed = 3f;
     private Inventory inventory;
-
-    public float Stamina { get { return stamina; } }  
-    public bool IsShowInfoItem { get; private set; }
-    public bool IsShowInfoDoor { get; private set; }
 
 	private void Start()
 	{
 		inventory = GetComponent<Inventory>();
-	}
+    }
 
 	private void Update()
     {
-        if (Input.GetKey(KeyCode.W))
-            Move(Vector3.forward);
+        Move();
+        Rotation();
 
-        if (Input.GetKey(KeyCode.S))
-            Move(Vector3.back);
-
-        if (Input.GetKey(KeyCode.D))
-            Move(Vector3.right);
-
-        if (Input.GetKey(KeyCode.A))
-            Move(Vector3.left);
-
-        Rotate(Input.GetAxis("Mouse X"));
-
-        DetectionInteractableObject();
         UseItem();
 
         if (Input.GetKey(KeyCode.LeftShift) 
@@ -56,19 +41,26 @@ public class Player : MonoBehaviour
             Walk();
             IncreaseStamina();
 		}
+
+        UIManage();
     }
 
-	private void Move(Vector3 direction)
+	private void Move()
 	{
-		transform.position += transform.TransformDirection(currentlyMovementSpeed * Time.deltaTime * direction);
+        float moveHorizontal = Input.GetAxis("Horizontal");
+        float moveVertical = Input.GetAxis("Vertical");
+
+        Vector3 movement = new Vector3(moveHorizontal, 0, moveVertical);
+        transform.Translate(currentlyMovementSpeed * Time.deltaTime * movement);
 	}
 
-    private void Rotate(float direction)
+    private void Rotation()
     {
-        transform.Rotate(Vector3.up, rotateSpeed * direction);
+        float direction = Input.GetAxis("Mouse X");
+        transform.Rotate(Vector3.up, direction * rotateSpeed);
     }
 
-    private void DetectionInteractableObject()
+    private Tags DetectionInteractableObject()
 	{
         Ray ray = new(transform.position, transform.TransformDirection(Vector3.forward) * interactionDistance);
 
@@ -76,57 +68,53 @@ public class Player : MonoBehaviour
 		{
             var someObj = obj.transform.gameObject;
 
-            if (someObj.CompareTag(Item.ItemTag))
+            if (someObj.CompareTag(nameof(Tags.Item)))
 			{
-                IsShowInfoItem = true;
-                PickupItem(someObj.GetComponent<Item>());
+                if (Input.GetKeyDown(KeyCode.E))
+                    PickupItem(someObj.GetComponent<Item>());
+
+                return Tags.Item;
             }
 
-            if (someObj.CompareTag(Door.DoorTag))
+            if (someObj.CompareTag(nameof(Tags.Door)))
             {
-                IsShowInfoDoor = true;
-                ActionDoor(someObj.GetComponent<Door>());
+                if (Input.GetKeyDown(KeyCode.E))
+                    DoorAction(someObj.GetComponent<Door>());
+
+                return Tags.Door;
             }
         }
-        else
-		{
-            IsShowInfoDoor = false;
-            IsShowInfoItem = false;
-        }
+        return Tags.None;
     }
 
-    private void PickupItem(Item item)
-    {
-       if (Input.GetKeyDown(KeyCode.E))
-	   {
-           item.gameObject.SetActive(false);
-           inventory.AddItem(item);
-       }
-    }
+    private void PickupItem(Item item) => inventory.AddItem(item);
 
-    private void ActionDoor(Door door)
-    {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            door.Action();
-        }
-    }
+    private void DoorAction(Door door) => door.Action();
 
     private void UseItem()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
-            inventory.UseItem((int)KeyCode.Alpha1 - 49);
+		{
+            var indexItem = (int)KeyUseInInventory.Alpha1;
+            inventory.UseItem(indexItem);
+        }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
-            inventory.UseItem((int)KeyCode.Alpha2 - 49);
+		{
+            var indexItem = (int)KeyUseInInventory.Alpha2;
+            inventory.UseItem(indexItem);
+        }
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
-            inventory.UseItem((int)KeyCode.Alpha3 - 49);
+		{
+            var indexItem = (int)KeyUseInInventory.Alpha3;
+            inventory.UseItem(indexItem);
+        }
     }
 
-    private bool StaminaIsOver() => stamina > 0;
+    private bool StaminaIsOver() => stamina < 0;
 
-    private bool StaminaIsFull() => stamina < 100;
+    private bool StaminaIsFull() => stamina > 100;
 
     private void Run() => currentlyMovementSpeed = runSpeed;
 
@@ -137,4 +125,10 @@ public class Player : MonoBehaviour
     private void IncreaseStamina() => stamina += staminaRecovery * Time.deltaTime;
 
     public void UpStamina(float value) => stamina += value;
+
+    private void UIManage()
+	{
+        uiManager.ShowInfoObject(DetectionInteractableObject());
+        uiManager.ChangeStaminaBar(stamina);
+    }
 }

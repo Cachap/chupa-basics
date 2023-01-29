@@ -4,33 +4,17 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
 	[SerializeField] Image fillStaminaBar;
-	[SerializeField] Text infoItem;
-	[SerializeField] Text infoDoor;
-	[SerializeField] Player player;
+	[SerializeField] Text infoObject;
 
-	private void Update()
+	public void ShowInfoObject(Tags tagObject)
 	{
-		ChangeStaminaBar();
-
-		if(player.IsShowInfoItem)
-			ShowInfoItem();
-		else
-			HideInfoItem();
-
-		if (player.IsShowInfoDoor)
-			ShowInfoDoor();
-		else
-			HideInfoDoor();
+		if (tagObject == Tags.Item)
+			infoObject.text = "Взять (Е)";
+		if (tagObject == Tags.Door)
+			infoObject.text = "Взаимодействовать (Е)";
+		if (tagObject == Tags.None)
+			infoObject.text = "";
 	}
 
-	private void ChangeStaminaBar() => fillStaminaBar.fillAmount = player.Stamina / 100;
-	
-
-	private void ShowInfoItem() => infoItem.gameObject.SetActive(true);
-
-	private void HideInfoItem() => infoItem.gameObject.SetActive(false);
-
-	private void ShowInfoDoor() => infoDoor.gameObject.SetActive(true);
-
-	private void HideInfoDoor() => infoDoor.gameObject.SetActive(false);
+	public void ChangeStaminaBar(float stamina) => fillStaminaBar.fillAmount = stamina / 100;
 }

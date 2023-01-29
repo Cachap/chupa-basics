@@ -21,16 +21,18 @@ public class Inventory : MonoBehaviour
 		if (InventoryIsFull())
 			return;
 
-		int i = 0;
+		item.gameObject.SetActive(false);
+
+		int indextEmptyCell = 0;
 		foreach (var cell in cells)
 		{
 			if (cell.sprite == emptyCell)
 			{
 				cell.sprite = item.sprite;
-				items[i] = item;
+				items[indextEmptyCell] = item;
 				break;
 			}
-			i++;
+			indextEmptyCell++;
 		}
 		countItems++;
 	}

@@ -2,16 +2,14 @@ using UnityEngine;
 
 public class Item : MonoBehaviour
 {
-	public readonly static string ItemTag = "Item";
-
-	[SerializeField] private bool isYourSelf;
+	[SerializeField] private bool isYourself;
 	private IEffect effect;
 
 	public Sprite sprite;
 
 	private void Start()
 	{
-		if(isYourSelf)
+		if(isYourself)
 			effect = gameObject.AddComponent<EffectOnYourself>();
 		else
 			effect = gameObject.AddComponent<EffectOnEnemy>();
