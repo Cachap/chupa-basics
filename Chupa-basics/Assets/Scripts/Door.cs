@@ -10,7 +10,7 @@ public class Door : MonoBehaviour
         joint = GetComponent<HingeJoint>();
     }
 
-    public void Action()
+	public void Action()
 	{
         isOpened = !isOpened;
 

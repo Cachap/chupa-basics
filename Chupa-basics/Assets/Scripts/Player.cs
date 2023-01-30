@@ -4,21 +4,23 @@ public class Player : MonoBehaviour
 {
     [SerializeField] private float runSpeed = 7f;
     [SerializeField] private float walkSpeed = 3f;
-    [SerializeField] private float rotateSpeed = 5f;
+    [SerializeField] private float rotateSpeed = 15f;
 
     [SerializeField] private float stamina = 100f;
-    [SerializeField] private float staminaConsumption = 40f;
-    [SerializeField] private float staminaRecovery = 20f;
+    [SerializeField] private float staminaConsumption = 20f;
+    [SerializeField] private float staminaRecovery = 10f;
 
     [SerializeField] private float interactionDistance = 3f;
     [SerializeField] private UIManager uiManager;
     
     private float currentlyMovementSpeed = 3f;
     private Inventory inventory;
+    private Rigidbody selfRigidbody;
 
 	private void Start()
 	{
 		inventory = GetComponent<Inventory>();
+        selfRigidbody = GetComponent<Rigidbody>();
     }
 
 	private void Update()
@@ -50,14 +52,19 @@ public class Player : MonoBehaviour
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
 
-        Vector3 movement = new Vector3(moveHorizontal, 0, moveVertical);
-        transform.Translate(currentlyMovementSpeed * Time.deltaTime * movement);
+        Vector3 movementX = moveVertical * transform.forward;
+        Vector3 movementY = moveHorizontal * transform.right;
+        Vector3 movement = movementX + movementY;
+
+        selfRigidbody.velocity = currentlyMovementSpeed * movement;
 	}
 
     private void Rotation()
     {
-        float direction = Input.GetAxis("Mouse X");
-        transform.Rotate(Vector3.up, direction * rotateSpeed);
+        Vector3 direction = Vector3.up * Input.GetAxis("Mouse X");
+        Quaternion deltaRotation = Quaternion.Euler(rotateSpeed * direction);
+
+        selfRigidbody.MoveRotation(selfRigidbody.rotation * deltaRotation);
     }
 
     private Tags DetectionInteractableObject()
