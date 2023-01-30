@@ -97,6 +97,7 @@ GameObject:
   - component: {fileID: 1634978829159155591}
   - component: {fileID: 465368198271855076}
   - component: {fileID: 4254467744510179856}
+  - component: {fileID: 1827819881401279625}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -180,8 +181,8 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
+  m_Radius: 1
+  m_Height: 2.5
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &4254467744510179856
@@ -196,4 +197,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d9247119b3b39a47becd60ca90c05b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 1.5
+  runSpeed: 7
+  walkSpeed: 3
+  rotateSpeed: 5
+  stamina: 100
+  staminaConsumption: 40
+  staminaRecovery: 20
+  interactionDistance: 3
+  uiManager: {fileID: 0}
+--- !u!54 &1827819881401279625
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1905774498392126092}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 116
+  m_CollisionDetection: 0
