@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Player : MonoBehaviour
 {
@@ -17,34 +18,30 @@ public class Player : MonoBehaviour
     private Inventory inventory;
     private Rigidbody selfRigidbody;
 
+    private UnityEvent<float> OnStaminaChange = new UnityEvent<float>();
+    private UnityEvent<Tags> OnInfoActionChange = new UnityEvent<Tags>();
+
 	private void Start()
 	{
 		inventory = GetComponent<Inventory>();
         selfRigidbody = GetComponent<Rigidbody>();
+        OnStaminaChange.AddListener(ChangeStaminaUI);
+        OnInfoActionChange.AddListener(ChangInfoAction);
     }
 
 	private void Update()
     {
         Move();
-        Rotation();
-
+        Rotate();
+        DetectInteractableObject();
         UseItem();
 
         if (Input.GetKey(KeyCode.LeftShift) 
             && !StaminaIsOver() 
             && !Input.GetKeyUp(KeyCode.LeftShift))
-		{
-            Run();
-            DecreaseStamina();
-		}
-
+                Run();
 		else if (!StaminaIsFull())
-		{
             Walk();
-            IncreaseStamina();
-		}
-
-        UIManage();
     }
 
 	private void Move()
@@ -59,7 +56,7 @@ public class Player : MonoBehaviour
         selfRigidbody.velocity = currentlyMovementSpeed * movement;
 	}
 
-    private void Rotation()
+    private void Rotate()
     {
         Vector3 direction = Vector3.up * Input.GetAxis("Mouse X");
         Quaternion deltaRotation = Quaternion.Euler(rotateSpeed * direction);
@@ -67,7 +64,7 @@ public class Player : MonoBehaviour
         selfRigidbody.MoveRotation(selfRigidbody.rotation * deltaRotation);
     }
 
-    private Tags DetectionInteractableObject()
+    private void DetectInteractableObject()
 	{
         Ray ray = new(transform.position, transform.TransformDirection(Vector3.forward) * interactionDistance);
 
@@ -80,7 +77,8 @@ public class Player : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.E))
                     PickupItem(someObj.GetComponent<Item>());
 
-                return Tags.Item;
+                OnInfoActionChange.Invoke(Tags.Item);
+                return;
             }
 
             if (someObj.CompareTag(nameof(Tags.Door)))
@@ -88,10 +86,12 @@ public class Player : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.E))
                     DoorAction(someObj.GetComponent<Door>());
 
-                return Tags.Door;
+                OnInfoActionChange.Invoke(Tags.Door);
+                return;
             }
         }
-        return Tags.None;
+
+        OnInfoActionChange.Invoke(Tags.None);
     }
 
     private void PickupItem(Item item) => inventory.AddItem(item);
@@ -123,19 +123,39 @@ public class Player : MonoBehaviour
 
     private bool StaminaIsFull() => stamina > 100;
 
-    private void Run() => currentlyMovementSpeed = runSpeed;
+    private void Run()
+	{
+        currentlyMovementSpeed = runSpeed;
+        DecreaseStamina();
+    }
 
-    private void Walk() => currentlyMovementSpeed = walkSpeed;
+	private void DecreaseStamina()
+	{
+        stamina -= staminaConsumption * Time.deltaTime;
+        OnStaminaChange.Invoke(stamina);
+    }
 
-    private void DecreaseStamina() => stamina -= staminaConsumption * Time.deltaTime;
+    private void Walk()
+    {
+        currentlyMovementSpeed = walkSpeed;
+        IncreaseStamina();
+    }
 
-    private void IncreaseStamina() => stamina += staminaRecovery * Time.deltaTime;
+    private void IncreaseStamina()
+	{
+        stamina += staminaRecovery * Time.deltaTime;
+        OnStaminaChange.Invoke(stamina);
+    }
 
     public void UpStamina(float value) => stamina += value;
 
-    private void UIManage()
+    private void ChangInfoAction(Tags tag)
 	{
-        uiManager.ShowInfoObject(DetectionInteractableObject());
+        uiManager.ShowInfoObject(tag);
+    }
+
+    private void ChangeStaminaUI(float value)
+	{
         uiManager.ChangeStaminaBar(stamina);
     }
 }

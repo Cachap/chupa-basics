@@ -3,8 +3,8 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-	[SerializeField] Image fillStaminaBar;
-	[SerializeField] Text infoObject;
+	[SerializeField] private Image fillStaminaBar;
+	[SerializeField] private Text infoObject;
 
 	public void ShowInfoObject(Tags tagObject)
 	{
