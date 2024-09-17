@@ -99,7 +99,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0, z: 1}
 --- !u!54 &8807007068865090949
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -131,7 +131,7 @@ HingeJoint:
   m_ConnectedAnchor: {x: 0, y: 0, z: 0}
   m_UseSpring: 1
   m_Spring:
-    spring: 1000
+    spring: 10000
     damper: 200
     targetPosition: 0
   m_UseMotor: 0
